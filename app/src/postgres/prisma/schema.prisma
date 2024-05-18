@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+
+}
+
+
+model User {
+  id       Int     @id @default(autoincrement())
+
+  name     String
+  email    String  @unique
+  password String
+
+  // seller   Seller?
+  // bidder   Bidder?
+
+notifications Notification_User[]
+
+}
+
+model Seller {
+  id       Int       @id @default(autoincrement())
+
+  email    String    @unique
+
+  // auctions Auction[]
+
+  
+  // user     User      @relation(fields: [userId], references: [id])
+  // userId   Int       @unique
+
+
+  sellItem SellItem[]
+}
+
+model Auction {
+  id          Int      @id @default(autoincrement())
+  
+  title       String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+
+  // seller      Seller   @relation(fields: [sellerId], references: [id])
+  // sellerId    Int
+
+  bids        Bid[]
+  
+  sellItem    SellItem  @relation(fields: [sellItemId], references: [id])
+  sellItemId  Int @unique
+
+  active      Boolean
+  processed   Boolean
+
+}
+
+model Bid {
+  id        Int     @id @default(autoincrement())
+  amount    Float
+  bidder    Bidder  @relation(fields: [bidderId], references: [id])
+  bidderId  Int
+  auction   Auction @relation(fields: [auctionId], references: [id])
+  auctionId Int
+}
+
+model Bidder {
+  id       Int    @id @default(autoincrement())
+
+  email    String @unique
+
+  bids     Bid[]
+
+  // user   User @relation(fields: [userId], references: [id])
+  // userId Int  @unique
+}
+
+model SellItem {
+  id          Int      @id @default(autoincrement())
+
+  name        String
+  description String
+  price       Float
+
+  seller      Seller   @relation(fields: [sellerId], references: [id])
+  sellerId    Int   
+
+  auction Auction?
+  
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  message   String
+  email     String   // Add a field for the email address
+  createdAt DateTime @default(now())
+
+}
+
+// Define the Notification model
+model Notification_User {
+  id        Int       @id @default(autoincrement())
+  message   String
+  createdAt DateTime  @default(now())
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+}

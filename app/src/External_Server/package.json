@@ -1,0 +1,21 @@
+{
+  "name": "external_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "main_Server": "npm run build && nodemon dist/External_Server/DataProcessServer_Ws/ws-server.js",
+    "client_StatusChecker": "npm run build && nodemon dist/External_Server/Server's_Client/ClientForStatusCheck.js",
+    "client_BidResultChecker": "npm run build && nodemon dist/External_Server/Server's_Client/ClientForBidResult.js",
+    "notify_Server": "npm run build && nodemon dist/External_Server/NotificationServer/Server_Ws.js"
+  },
+  "author": "Arnab Paul",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "bullmq": "^5.4.5",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
+  }
+}
